@@ -10,7 +10,7 @@
 ###############################################################
 
 $bigrams = Hash.new # The Bigram data structure
-$name = "<firstname> <lastname>"
+$name = "Nathanial Tranel"
 
 # function to process each line of a file and extract the song titles
 def process_file(file_name)
@@ -19,6 +19,7 @@ def process_file(file_name)
 	begin
 		IO.foreach(file_name) do |line|
 			# do something for each line
+			cleanup_title(line)
 		end
 
 		puts "Finished. Bigram model built.\n"
@@ -27,6 +28,20 @@ def process_file(file_name)
 		exit 4
 	end
 end
+
+def cleanup_title(str)
+	str.gsub!(/^.*>/, "")
+	if str =~ /\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/
+		str.gsub!(/\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/, "")
+	end
+
+	if str =~ /\?|¿|\!|¡|\.|;|\&|@|%|\#|\|/
+		str.gsub!(/\?|¿|\!|¡|\.|;|\&|@|%|\#|\|/, "")
+	end
+
+	str
+end
+
 
 # Executes the program
 def main_loop()
