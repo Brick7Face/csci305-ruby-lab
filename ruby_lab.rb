@@ -19,7 +19,7 @@ def process_file(file_name)
 	begin
 		IO.foreach(file_name) do |line|
 			# do something for each line
-			cleanup_title(line)
+			print cleanup_title(line)
 		end
 
 		puts "Finished. Bigram model built.\n"
@@ -29,17 +29,18 @@ def process_file(file_name)
 	end
 end
 
+#USE A TRIE STRUCTURE FOR STORING BIGRAMS
+
+
 def cleanup_title(str)
-	str.gsub!(/^.*>/, "")
-	if str =~ /\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/
-		str.gsub!(/\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/, "")
+	title = str.gsub!(/^.*>/, "")
+	title.gsub!(/\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/, "")
+	title.gsub!(/\?|\!|\U+00BF|\U+00A1|\.|;|\&|@|%|\#|\|/, "")	#unicode characters for inverted question mark and exclamation mark
+	if title =~ /[^\w^\s']/	#filter out nonenglish titles
+		return nil
 	end
-
-	if str =~ /\?|¿|\!|¡|\.|;|\&|@|%|\#|\|/
-		str.gsub!(/\?|¿|\!|¡|\.|;|\&|@|%|\#|\|/, "")
-	end
-
-	str
+	title.downcase!
+	title
 end
 
 
