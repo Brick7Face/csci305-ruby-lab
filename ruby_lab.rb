@@ -17,9 +17,9 @@ def process_file(file_name)
 	puts "Processing File.... "
 
 	begin
-		IO.foreach(file_name) do |line|
+		IO.foreach(file_name, encoding: "UTF-8") do |line|
 			# do something for each line
-			print cleanup_title(line)
+			cleanup_title(line)
 		end
 
 		puts "Finished. Bigram model built.\n"
@@ -35,7 +35,7 @@ end
 def cleanup_title(str)
 	title = str.gsub!(/^.*>/, "")
 	title.gsub!(/\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/, "")
-	title.gsub!(/\?|\!|\U+00BF|\U+00A1|\.|;|\&|@|%|\#|\|/, "")	#unicode characters for inverted question mark and exclamation mark
+	title.gsub!(/\?|\!|¿|¡|\.|;|\&|@|%|\#|\|/, "")
 	if title =~ /[^\w^\s']/	#filter out nonenglish titles
 		return nil
 	end
