@@ -9,40 +9,70 @@
 #
 ###############################################################
 
-$bigrams = Hash.new # The Bigram data structure
+$bigrams = Hash.new{|hsh,key| hsh[key] = {} } # The Bigram data structure
 $name = "Nathanial Tranel"
 
 # function to process each line of a file and extract the song titles
 def process_file(file_name)
 	puts "Processing File.... "
-
 	begin
 		IO.foreach(file_name, encoding: "UTF-8") do |line|
-			# do something for each line
-			cleanup_title(line)
+			title = cleanup_title(line)
+			unless title.nil?
+				words = title.split(/\s/)
+				$i = 0
+				until $i > (words.size-1) do
+					if $bigrams["#{words[$i]}"]["#{words[$i+1]}"].nil?
+						$bigrams["#{words[$i]}"].store "#{words[$i+1]}",1
+					else
+						j = $bigrams["#{words[$i]}"]["#{words[$i+1]}"]
+						j += 1
+						$bigrams["#{words[$i]}"]["#{words[$i+1]}"] = j
+					end
+					$i += 1
+				end
+			end
 		end
 
+		puts $bigrams["computer"]
+		#puts mcw("sad")
+
 		puts "Finished. Bigram model built.\n"
-	rescue
-		STDERR.puts "Could not open file"
-		exit 4
+		rescue
+			STDERR.puts "Could not open file"
+			exit 4
 	end
 end
-
-#USE A TRIE STRUCTURE FOR STORING BIGRAMS
 
 
 def cleanup_title(str)
-	title = str.gsub!(/^.*>/, "")
-	title.gsub!(/\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/, "")
-	title.gsub!(/\?|\!|¿|¡|\.|;|\&|@|%|\#|\|/, "")
-	if title =~ /[^\w^\s']/	#filter out nonenglish titles
+	str.gsub!(/^.*>/, "")
+	str.gsub!(/\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/, "")
+	str.gsub!(/\?|\!|¿|¡|\.|;|\&|@|%|\#|\|/, "")
+	if str =~ /[^\w^\s']/	#filter out nonenglish titles
 		return nil
 	end
-	title.downcase!
-	title
+	str.downcase!
+	str
 end
 
+def mcw(word)
+	i = 0
+	val = 0
+	common = ""
+	until i == $bigrams["#{word}"].size do
+		$bigrams["#{word}"].each {|key, value|
+			unless key == ""
+				if value > val
+					val = value
+					common = key
+				end
+			end
+		}
+		i += 1
+	end
+	common
+end
 
 # Executes the program
 def main_loop()
