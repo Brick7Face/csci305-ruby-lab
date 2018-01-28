@@ -34,8 +34,8 @@ def process_file(file_name)
 			end
 		end
 
-		puts $bigrams["computer"]
-		#puts mcw("sad")
+		puts $bigrams["love"]
+		puts mcw("sad")
 
 		puts "Finished. Bigram model built.\n"
 		rescue
