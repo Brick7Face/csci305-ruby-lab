@@ -4,8 +4,8 @@
 #
 # CSCI 305 - Ruby Programming Lab
 #
-# <firstname> <lastname>
-# <email-address>
+# Nathanial Tranel
+# njtranel@gmail.com
 #
 ###############################################################
 
@@ -33,10 +33,6 @@ def process_file(file_name)
 				end
 			end
 		end
-
-		puts $bigrams["love"]
-		puts mcw("sad")
-
 		puts "Finished. Bigram model built.\n"
 		rescue
 			STDERR.puts "Could not open file"
@@ -71,7 +67,17 @@ def mcw(word)
 		}
 		i += 1
 	end
-	common
+end
+
+def create_title(word)
+	length = 0
+	print ("#{word} ")
+	until ((length == 20) | ($bigrams["#{word}"].size == 0)) do
+		word = mcw(word)
+		print ("#{word} ")
+		length += 1
+	end
+	print ("\n")
 end
 
 # Executes the program
@@ -87,6 +93,12 @@ def main_loop()
 	process_file(ARGV[0])
 
 	# Get user input
+	input = ""
+	until input.casecmp("q") do
+		print ("Enter a word [Enter 'q' to quit]: ")
+		input = gets.chomp
+		create_title(input)
+	end
 end
 
 if __FILE__==$0
