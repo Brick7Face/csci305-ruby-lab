@@ -67,17 +67,21 @@ def mcw(word)
 		}
 		i += 1
 	end
+	common
 end
 
 def create_title(word)
 	length = 0
-	print ("#{word} ")
+	full_title = word
+	print ("#{word } ")
 	until ((length == 20) | ($bigrams["#{word}"].size == 0)) do
 		word = mcw(word)
-		print ("#{word} ")
+		print ("#{word } ")
+		full_title = full_title + " " + word
 		length += 1
 	end
 	print ("\n")
+	full_title
 end
 
 # Executes the program
@@ -93,11 +97,11 @@ def main_loop()
 	process_file(ARGV[0])
 
 	# Get user input
-	input = ""
-	until input.casecmp("q") do
+	in_word = ""
+	until in_word.casecmp("q") do
 		print ("Enter a word [Enter 'q' to quit]: ")
-		input = gets.chomp
-		create_title(input)
+		in_word = gets.chomp
+		create_title(in_word)
 	end
 end
 
