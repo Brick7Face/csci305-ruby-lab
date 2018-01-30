@@ -22,6 +22,9 @@ def process_file(file_name)
 				words = title.split(/\s/)
 				$i = 0
 				until $i > (words.size-1) do
+					if words[$i].eql?("")
+						$i += 1
+					end
 					if $bigrams["#{words[$i]}"]["#{words[$i+1]}"].nil?
 						$bigrams["#{words[$i]}"].store "#{words[$i+1]}",1
 					else
@@ -58,7 +61,7 @@ def mcw(word)
 	common = ""
 	until i == $bigrams["#{word}"].size do
 		$bigrams["#{word}"].each {|key, value|
-			unless key == ""
+			unless key.eql?("")
 				if value > val
 					val = value
 					common = key
@@ -98,11 +101,11 @@ def main_loop()
 
 	# Get user input
 	in_word = ""
-	until in_word.casecmp("q") do
+	begin
 		print ("Enter a word [Enter 'q' to quit]: ")
-		in_word = gets.chomp
+		in_word = $stdin.gets.chomp
 		create_title(in_word)
-	end
+	end until in_word.eql?("q")
 end
 
 if __FILE__==$0
