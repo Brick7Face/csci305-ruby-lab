@@ -1,7 +1,7 @@
-Your name
+Nathanial Tranel
 CSCI-305
 
-10.
+10. There are a number of phrases, depending on the word, but they all get stuck in a loop of some form. The most common one I see is some version of "is a little girl in the world"
 
 14.
 

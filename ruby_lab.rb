@@ -7,32 +7,32 @@
 # Nathanial Tranel
 # njtranel@gmail.com
 #
+# The data structure used - a hash of hashes - stores a hash
+# where the key is the first word in the bigram and the value
+# is a hash where the key is the second bigram word and the
+# value is the frequency with which that word occurs after
+# the first.
 ###############################################################
 
-$bigrams = Hash.new{|hsh,key| hsh[key] = {} } # The Bigram data structure
-$name = "Nathanial Tranel"
+$bigrams = Hash.new{|hsh,key| hsh[key] = {} } 	# The Bigram data structure - using a hash of hashes
+$name = "Nathanial Tranel"											# constant for name
 
 # function to process each line of a file and extract the song titles
 def process_file(file_name)
 	puts "Processing File.... "
 	begin
-		IO.foreach(file_name, encoding: "UTF-8") do |line|
-			title = cleanup_title(line)
-			unless title.nil?
-				words = title.split(/\s/)
-				$i = 0
-				until $i > (words.size-1) do
-					if words[$i].eql?("")
-						$i += 1
-					end
-					if $bigrams["#{words[$i]}"]["#{words[$i+1]}"].nil?
-						$bigrams["#{words[$i]}"].store "#{words[$i+1]}",1
+		IO.foreach(file_name, encoding: "UTF-8") do |line|		# loop through each file line
+			title = cleanup_title(line)													# for each line, cleanup the title
+			unless title.nil?																		# don't proceed if title is nil - skip those
+				words = title.split(/\s/)													# find the individual words in the title
+				i = 0
+				until i > (words.size-2) do
+					if $bigrams["#{words[i]}"]["#{words[i+1]}"].nil?
+						$bigrams["#{words[i]}"].store "#{words[i+1]}",1
 					else
-						j = $bigrams["#{words[$i]}"]["#{words[$i+1]}"]
-						j += 1
-						$bigrams["#{words[$i]}"]["#{words[$i+1]}"] = j
+						$bigrams["#{words[i]}"]["#{words[i+1]}"] = $bigrams["#{words[i]}"]["#{words[i+1]}"] + 1
 					end
-					$i += 1
+					i += 1
 				end
 			end
 		end
@@ -43,48 +43,45 @@ def process_file(file_name)
 	end
 end
 
-
+# function to extract the title and remove unnecessary markings
 def cleanup_title(str)
-	str.gsub!(/^.*>/, "")
-	str.gsub!(/\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/, "")
-	str.gsub!(/\?|\!|¿|¡|\.|;|\&|@|%|\#|\|/, "")
-	if str =~ /[^\w^\s']/	#filter out nonenglish titles
-		return nil
+	str.gsub!(/^.*>/, "")																								# extract title at end of string
+	str.gsub!(/\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/, "")		# remove special characters
+	str.gsub!(/\?|\!|¿|¡|\.|;|\&|@|%|\#|\|/, "")												# remove punctuation
+	if str =~ /[^\w^\s']/																								# filter out non-English titles
+		return nil																												# if non-English, return empty title
 	end
-	str.downcase!
+	str.downcase!																												# set title to lowercase
 	str
 end
 
+# function to find the most common word that comes after the word provided as a parameter
 def mcw(word)
-	i = 0
-	val = 0
-	common = ""
-	until i == $bigrams["#{word}"].size do
-		$bigrams["#{word}"].each {|key, value|
-			unless key.eql?("")
-				if value > val
-					val = value
-					common = key
-				end
+	val = 0																								# represents the frequency with which the second word occurs
+	common = ""																						# the most common word, initialized to the empty string
+	$bigrams["#{word}"].each {|key, value|								# loop through each word following the given word
+		unless key.eql?("")																	# skip if the word is the empty string
+			if value > val																		# if the frequency of occurances is higher than the current highest,
+				val = value																			# update it,
+				common = key																		# and set the most common word to be the corresponding key
 			end
-		}
-		i += 1
-	end
-	common
+		end
+	}
+	common																								# return the most common word
 end
 
+# function to generate a title based on an input word
 def create_title(word)
-	length = 0
-	full_title = word
-	print ("#{word } ")
-	until ((length == 20) | ($bigrams["#{word}"].size == 0)) do
-		word = mcw(word)
-		print ("#{word } ")
-		full_title = full_title + " " + word
-		length += 1
+	full_title = word																			# title will be just the word provided to start
+	print ("#{word}")																			# print out the starting word
+	19.times do
+		break if $bigrams["#{word}"].size == 0
+		word = mcw(word)																		# find the most common word that comes next
+		print (" #{word}")																	# print it
+		full_title = full_title + " " + word								# add the word to the full title
 	end
-	print ("\n")
-	full_title
+	print ("\n")																					# print new line for spacing
+	full_title																						# return full title
 end
 
 # Executes the program
@@ -100,12 +97,12 @@ def main_loop()
 	process_file(ARGV[0])
 
 	# Get user input
-	in_word = ""
-	begin
-		print ("Enter a word [Enter 'q' to quit]: ")
-		in_word = $stdin.gets.chomp
-		create_title(in_word)
-	end until in_word.eql?("q")
+	while	true																						# loop for input ...
+		print ("Enter a word [Enter 'q' to quit]: ")				# prompt the user,
+		in_word = $stdin.gets.chomp													# get the input from STDIN, snipping off the \n
+		break if in_word.eql?("q")													# break the loop if q is entered
+		create_title(in_word)																# create a title if valid word is entered
+	end
 end
 
 if __FILE__==$0
