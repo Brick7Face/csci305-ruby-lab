@@ -25,14 +25,28 @@ def process_file(file_name)
 			title = cleanup_title(line)													# for each line, cleanup the title
 			unless title.nil?																		# don't proceed if title is nil - skip those
 				words = title.split(/\s/)													# find the individual words in the title
-				i = 0
-				until i > (words.size-2) do
+				words.delete("a")
+				words.delete("an")
+				words.delete("and")
+				words.delete("by")
+				words.delete("for")
+				words.delete("from")
+				words.delete("in")
+				words.delete("of")
+				words.delete("on")
+				words.delete("or")
+				words.delete("out")
+				words.delete("the")
+				words.delete("to")
+				words.delete("with")
+
+
+				(0..words.size-2).each do |i|
 					if $bigrams["#{words[i]}"]["#{words[i+1]}"].nil?
 						$bigrams["#{words[i]}"].store "#{words[i+1]}",1
 					else
 						$bigrams["#{words[i]}"]["#{words[i+1]}"] = $bigrams["#{words[i]}"]["#{words[i+1]}"] + 1
 					end
-					i += 1
 				end
 			end
 		end
@@ -45,14 +59,17 @@ end
 
 # function to extract the title and remove unnecessary markings
 def cleanup_title(str)
-	str.gsub!(/^.*>/, "")																								# extract title at end of string
-	str.gsub!(/\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/, "")		# remove special characters
-	str.gsub!(/\?|\!|¿|¡|\.|;|\&|@|%|\#|\|/, "")												# remove punctuation
-	if str =~ /[^\w^\s']/																								# filter out non-English titles
-		return nil																												# if non-English, return empty title
+	title = ""
+	if str =~ (/(^.*>)(.*)/)																							# extract title at end of string
+		title = $2
 	end
-	str.downcase!																												# set title to lowercase
-	str
+	title.gsub!(/\s*(\(|\[|\{|\\|\/|_|-|:|"|`|\+|=|\*|feat\.).*$/, "")		# remove special characters
+	title.gsub!(/\?|\!|¿|¡|\.|;|\&|@|%|\#|\|/, "")												# remove punctuation
+	if title =~ /(^\w^\s')/																								# filter out non-English titles
+		return nil																													# if non-English, return empty title
+	end
+	title.downcase!																												# set title to lowercase
+	title
 end
 
 # function to find the most common word that comes after the word provided as a parameter
@@ -80,7 +97,7 @@ def create_title(word)
 		print (" #{word}")																	# print it
 		full_title = full_title + " " + word								# add the word to the full title
 	end
-	print ("\n")																					# print new line for spacing
+	puts ("\n")																						# print new line for spacing
 	full_title																						# return full title
 end
 

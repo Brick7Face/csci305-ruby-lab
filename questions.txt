@@ -3,9 +3,13 @@ CSCI-305
 
 10. There are a number of phrases, depending on the word, but they all get stuck in a loop of some form. The most common one I see is some version of "is a little girl in the world"
 
-14.
+14. Mainly due to common word patterns and the "greedy" way in which I have implemented the word finding so far, a lot of word patterns follow each other. For example, the "you ready love"
+pattern - "ready" most commonly follows "you" and "love" most commonly follows "ready". That is fine, but "you" most commonly follows "love", so the program gets trapped in a loop of sorts
+since the most common second word ends up producing the same pattern. Additionally, these "looper words" are common words, so almost every word typed into the program is effected by this
+issue.
 
-15.
+15. I tried book, computer, water, fly, flower, and amore. The only one that I found that terminated before 20 words was amore, but that's because it's not in English and therefore had less
+words to work with in the set - the title found was "amore mio babbino caro gianni schicchi". Every other word I tried got caught in a loop.
 
 16.
 
