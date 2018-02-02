@@ -45,7 +45,7 @@ def process_file(file_name)
 					if $bigrams["#{words[i]}"]["#{words[i+1]}"].nil?
 						$bigrams["#{words[i]}"].store "#{words[i+1]}",1
 					else
-						$bigrams["#{words[i]}"]["#{words[i+1]}"] = $bigrams["#{words[i]}"]["#{words[i+1]}"] + 1
+						$bigrams["#{words[i]}"]["#{words[i+1]}"] += 1
 					end
 				end
 			end
@@ -74,16 +74,24 @@ end
 
 # function to find the most common word that comes after the word provided as a parameter
 def mcw(word)
-	val = 0																								# represents the frequency with which the second word occurs
+	most = 0																							# represents the frequency with which the second word occurs
 	common = ""																						# the most common word, initialized to the empty string
 	$bigrams["#{word}"].each {|key, value|								# loop through each word following the given word
 		unless key.eql?("")																	# skip if the word is the empty string
-			if value > val																		# if the frequency of occurances is higher than the current highest,
-				val = value																			# update it,
+			if value > most																		# if the frequency of occurances is higher than the current highest,
+				most = value																		# update it,
 				common = key																		# and set the most common word to be the corresponding key
 			end
 		end
 	}
+
+	#experimental - deletes words at 0
+	if $bigrams["#{word}"]["#{common}"] > 50
+		$bigrams["#{word}"]["#{common}"] -= 50
+	else
+		$bigrams["#{word}"]["#{common}"] = 0
+	end
+
 	common																								# return the most common word
 end
 

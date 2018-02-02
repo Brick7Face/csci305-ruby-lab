@@ -11,18 +11,25 @@ issue.
 15. I tried book, computer, water, fly, flower, and amore. The only one that I found that terminated before 20 words was amore, but that's because it's not in English and therefore had less
 words to work with in the set - the title found was "amore mio babbino caro gianni schicchi". Every other word I tried got caught in a loop.
 
-16.
+16. I added a structure that penalizes words for being used before.
 
 19.
 
 20.
 
-21.
+21. I like the capabilities Ruby has - it feels like a mix of Python and Java. The shorthands are very nice in particular - I like how simple loops are to setup and the variability of
+the built-in functionality, such as {number}.times. The overall syntax feels very friendly and there is plenty of documentation.  String manipulation felt very easy with regular
+expressions and the built-in string manipulation functions.
 
-22.
+22. I don't like the variety of print commands so much - it seems like they each do their own thing. For example, sometimes "p" will put quotes around things, even though "puts" does
+not always do this and "p" is shorthand for "puts." I've found that I just prefer to use "print" since all formatting is specified by the coder. However, I concede that this and other
+small things I disliked about Ruby during this lab (I don't remember anything else now) may just be due to some of my unfamiliarities with parts of the language. All languages have 
+disadvantages, of course, but Ruby felt like a breath of fresh air compared to Java. One small thing that bothered me was the use of "elsif" instead of "elif" or "else if" - I just
+don't like the sound of "elsif."
 
-23.
+23. Yes - I very much enjoyed how each step was guided, but enough was concealed that it was a challenge. The self-checks were very helpful as well. 
 
-24.
+24. Probably around 15 hours or so - I definitely felt like I put more time in than I maybe should have, but I like to understand everything that is going on. 
 
-25.
+25. Yes, but I'm not completely sure for what. I think that it would be extremely useful for any type of string manipulation projects, or potentially machine learning related
+projects. Having taken machine learning in semesters previous, I think it would be easier to implement algorithms in Ruby than in Java. 
