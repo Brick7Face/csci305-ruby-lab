@@ -7,14 +7,9 @@
 # Nathanial Tranel
 # njtranel@gmail.com
 #
-# The data structure used - a hash of hashes - stores a hash
-# where the key is the first word in the bigram and the value
-# is a hash where the key is the second bigram word and the
-# value is the frequency with which that word occurs after
-# the first.
 ###############################################################
 
-$bigrams = Hash.new{|hsh,key| hsh[key] = {} } 	# The Bigram data structure - using a hash of hashes
+$bigrams = Hash.new{|hsh,key| hsh[key] = Hash.new{|hsh,key| hsh[key] = Array.new} } 	# The Bigram data structure - using a hash of hashes
 $name = "Nathanial Tranel"											# constant for name
 
 # function to process each line of a file and extract the song titles
@@ -40,20 +35,20 @@ def process_file(file_name)
 				words.delete("to")
 				words.delete("with")
 
-
 				(0..words.size-2).each do |i|
-					if $bigrams["#{words[i]}"]["#{words[i+1]}"].nil?
-						$bigrams["#{words[i]}"].store "#{words[i+1]}",1
+					$bigrams["#{words[i]}"]["#{words[i+1]}"]
+					if $bigrams["#{words[i]}"]["#{words[i+1]}"][0].nil?
+						$bigrams["#{words[i]}"].store("#{words[i+1]}", [1, false])
 					else
-						$bigrams["#{words[i]}"]["#{words[i+1]}"] += 1
+						$bigrams["#{words[i]}"]["#{words[i+1]}"][0] += 1
 					end
 				end
 			end
 		end
 		puts "Finished. Bigram model built.\n"
-		rescue
-			STDERR.puts "Could not open file"
-			exit 4
+		#rescue
+			#STDERR.puts "Could not open file"
+			#exit 4
 	end
 end
 
@@ -78,18 +73,16 @@ def mcw(word)
 	common = ""																						# the most common word, initialized to the empty string
 	$bigrams["#{word}"].each {|key, value|								# loop through each word following the given word
 		unless key.eql?("")																	# skip if the word is the empty string
-			if value > most																		# if the frequency of occurances is higher than the current highest,
-				most = value																		# update it,
+			if value[0] > most and value[1] == false					# if the frequency of occurances is higher than the current highest,
+				most = value[0]																	# update it,
 				common = key																		# and set the most common word to be the corresponding key
 			end
 		end
 	}
 
-	#experimental - deletes words at 0
-	if $bigrams["#{word}"]["#{common}"] > 50
-		$bigrams["#{word}"]["#{common}"] -= 50
-	else
-		$bigrams["#{word}"]["#{common}"] = 0
+	#experimental
+	if $bigrams["#{word}"]["#{common}"][1] == false
+		$bigrams["#{word}"]["#{common}"][1] = true
 	end
 
 	common																								# return the most common word
@@ -99,9 +92,9 @@ end
 def create_title(word)
 	full_title = word																			# title will be just the word provided to start
 	print ("#{word}")																			# print out the starting word
-	19.times do
-		break if $bigrams["#{word}"].size == 0
+	until false
 		word = mcw(word)																		# find the most common word that comes next
+		break if word.eql?("")
 		print (" #{word}")																	# print it
 		full_title = full_title + " " + word								# add the word to the full title
 	end
