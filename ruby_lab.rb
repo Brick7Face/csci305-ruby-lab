@@ -46,9 +46,9 @@ def process_file(file_name)
 			end
 		end
 		puts "Finished. Bigram model built.\n"
-		#rescue
-			#STDERR.puts "Could not open file"
-			#exit 4
+		rescue
+			STDERR.puts "Could not open file"
+			exit 4
 	end
 end
 
@@ -72,18 +72,15 @@ def mcw(word)
 	most = 0																							# represents the frequency with which the second word occurs
 	common = ""																						# the most common word, initialized to the empty string
 	$bigrams["#{word}"].each {|key, value|								# loop through each word following the given word
-		unless key.eql?("")																	# skip if the word is the empty string
 			if value[0] > most and value[1] == false					# if the frequency of occurances is higher than the current highest,
 				most = value[0]																	# update it,
 				common = key																		# and set the most common word to be the corresponding key
 			end
-		end
 	}
 
-	#experimental
-	if $bigrams["#{word}"]["#{common}"][1] == false
-		$bigrams["#{word}"]["#{common}"][1] = true
-	end
+#experimental
+$bigrams["#{word}"]["#{common}"][1] = true
+
 
 	common																								# return the most common word
 end
@@ -92,7 +89,8 @@ end
 def create_title(word)
 	full_title = word																			# title will be just the word provided to start
 	print ("#{word}")																			# print out the starting word
-	until false
+	r = rand(3...19)
+	r.times do
 		word = mcw(word)																		# find the most common word that comes next
 		break if word.eql?("")
 		print (" #{word}")																	# print it
