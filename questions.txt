@@ -11,25 +11,37 @@ issue.
 15. I tried book, computer, water, fly, flower, and amore. The only one that I found that terminated before 20 words was amore, but that's because it's not in English and therefore had less
 words to work with in the set - the title found was "amore mio babbino caro gianni schicchi". Every other word I tried got caught in a loop.
 
-16. I added a structure that penalizes words for being used before.
+16. I added a structure that penalizes words for being used before. Essentially, the data structure used was a hash of a hash, and I changed the inner hash to contain an array as its value
+that holds the number of occurrences of the second word in the bigram (as it did before) and a boolean flag for whether the word was used before. When the word turned up as a result from 
+mcw(), it was marked as true. Additionally, words could not be repeated in the same title - while it does eliminate the possibility of generating a title such as "ho ho ho," I considered
+this a necessary sacrifice to get titles with reasonable lengths. If a single word's options for a following word are exhausted, it will just print that first word and prompt the user for
+a new word again.
 
-19.
+17. Using the starting word "montana", I get the song title "montana sacra nova scotia"
 
-20.
+18. Using the starting word "bob", I get the song title "bob marley vs world is my heart"
+
+19. If I try "bob" again, I do not get the same title - I get the title "bob dylan movies antarctica starts now that" this time. The third time, I get "bob rogers at all i love you are". 
+It makes sense that this would change every time, as that is what I prioritized in my fix. The next word after bob is different every time since I marked the other one as used (set the 
+value to true) and so it was not returned as the most common word, giving other words a chance. This system should lead to a distinct title every time, regardless of the first word entered.
+
+20. "tuba soprano cello suite" is pretty good. I mainly just tried to imagine what a tuba, a cello, and a soprano would sound like together. It could maybe be good, but seems like it would
+just generally lack any kind of middle range. There were also some funny titles with expletives in them, but I prefer not to share those.
 
 21. I like the capabilities Ruby has - it feels like a mix of Python and Java. The shorthands are very nice in particular - I like how simple loops are to setup and the variability of
 the built-in functionality, such as {number}.times. The overall syntax feels very friendly and there is plenty of documentation.  String manipulation felt very easy with regular
-expressions and the built-in string manipulation functions.
+expressions and the built-in string manipulation functions. It made a lot of difficult things seem easy.
 
 22. I don't like the variety of print commands so much - it seems like they each do their own thing. For example, sometimes "p" will put quotes around things, even though "puts" does
 not always do this and "p" is shorthand for "puts." I've found that I just prefer to use "print" since all formatting is specified by the coder. However, I concede that this and other
 small things I disliked about Ruby during this lab (I don't remember anything else now) may just be due to some of my unfamiliarities with parts of the language. All languages have 
 disadvantages, of course, but Ruby felt like a breath of fresh air compared to Java. One small thing that bothered me was the use of "elsif" instead of "elif" or "else if" - I just
-don't like the sound of "elsif."
+don't like the sound of "elsif." Other than that, I don't have any legitimate criticisms of the language based on my familiarity with it.
 
-23. Yes - I very much enjoyed how each step was guided, but enough was concealed that it was a challenge. The self-checks were very helpful as well. 
+23. Yes - I very much enjoyed how each step was guided, but enough was concealed that it was a challenge. The self-checks were very helpful as well. The lab seemed like a lot up
+front, but did not turn out to be very bad. It seemed like a useful challenge in that the program and problem solving were relevant to real life applications.
 
-24. Probably around 15 hours or so - I definitely felt like I put more time in than I maybe should have, but I like to understand everything that is going on. 
+24. Probably around 20 hours or so - I definitely felt like I put more time in than I maybe should have, but I like to understand everything that is going on. 
 
 25. Yes, but I'm not completely sure for what. I think that it would be extremely useful for any type of string manipulation projects, or potentially machine learning related
 projects. Having taken machine learning in semesters previous, I think it would be easier to implement algorithms in Ruby than in Java. 
